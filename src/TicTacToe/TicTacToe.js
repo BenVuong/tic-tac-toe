@@ -3,14 +3,33 @@ import './TicTacToe.css'
 const TicTacToe = () => {
 
     const[turn, setTurn] = useState('x')
+    const[cells, setCells] = useState(Array(9).fill(''));
+
 
     const handleClick = (num) =>
     {
-        alert(num);
+        //alert(num);
+        //Alternates players turn after every click
+
+        //copies the cell array into the sqaures variable
+        let squares = [...cells];
+
+        if (turn==='x')
+        {
+            squares[num] = 'x'
+            setTurn('o')
+        }
+        else
+        {
+            squares[num] = 'o'
+            setTurn('x')
+        }
+        setCells(squares)
+        console.log(squares)
     };
 
     const Cell = ({num}) => {
-        return <td onClick={()=>handleClick(num)}>-</td>;
+        return <td onClick={()=>handleClick(num)}>{cells[num]}</td>;
     };
 
     
@@ -18,6 +37,7 @@ const TicTacToe = () => {
     return(
         <div >
             <h1>Tic Tac Toe</h1>
+            Current player's turn: {turn}     
             <table className='container'>
                 <tbody>
                     <tr>
