@@ -4,11 +4,59 @@ const TicTacToe = () => {
 
     const[turn, setTurn] = useState('x')
     const[cells, setCells] = useState(Array(9).fill(''));
+    const[winner, setWinner] = useState();
 
+    const checkForWinner = (sqaures) =>{
+        let combos = {
+            across: [
+                [0,1,2],
+                [3,4,5],
+                [6,7,8],
+            ],
+            down: [
+                [0,3,6],
+                [1,4,7],
+                [2,5,8],
+            ],
+            diagonal: [
+                [0, 4, 8],
+				[2, 4, 6],
+            ],
+            
+        };
+        for(let combo in combos){
+            combos[combo].forEach((pattern)=>
+            {
+                if (
+                    sqaures[pattern[0]] === ''||
+                    sqaures[pattern[1]] === ''||
+                    sqaures[pattern[2]] === ''
+                )
+                {
+
+                }
+                else if (sqaures[pattern[0]] === sqaures[pattern[1]]&&
+                        sqaures[pattern[1]] === sqaures[pattern[2]])
+                {
+                    setWinner(sqaures[pattern[0]]);
+                }
+            });
+        }
+    };
+
+    const handleRestart = () =>
+    {
+        setWinner(null);
+        setCells(Array(9).fill(''));
+    }
 
     const handleClick = (num) =>
     {
-        //alert(num);
+        if(cells[num] !== '')
+        {
+            alert('spot already taken');
+            return;
+        }
         //Alternates players turn after every click
 
         //copies the cell array into the sqaures variable
@@ -24,8 +72,9 @@ const TicTacToe = () => {
             squares[num] = 'o'
             setTurn('x')
         }
+        checkForWinner(squares)
         setCells(squares)
-        console.log(squares)
+        
     };
 
     const Cell = ({num}) => {
@@ -57,6 +106,12 @@ const TicTacToe = () => {
                     </tr>
                 </tbody>
             </table>
+            {winner && (
+                <>
+                <p>{winner} is the winner</p>
+                <button onClick={()=>handleRestart()}>Play Again?</button>
+                </>
+            )}
         </div>
     )
 }
